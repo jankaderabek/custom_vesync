@@ -90,7 +90,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
         hass.data[DOMAIN][config_entry.entry_id][vs_p] = []
         if device_dict[vs_p]:
             hass.data[DOMAIN][config_entry.entry_id][vs_p].extend(device_dict[vs_p])
-            await hass.config_entries.async_forward_entry_setups(config_entry, p)
+            await hass.config_entries.async_forward_entry_setups(config_entry, [p.value])
 
     async def async_new_device_discovery(service: ServiceCall) -> None:
         """Discover if new devices should be added."""
@@ -109,7 +109,7 @@ async def async_setup_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> b
                         hass, VS_DISCOVERY.format(PLATFORMS[platform]), new_devices
                     )
                 else:
-                    await hass.config_entries.async_forward_entry_setups(config_entry, platform)
+                    await hass.config_entries.async_forward_entry_setups(config_entry, [platform.value])
 
         for k in PLATFORMS:
             await _add_new_devices(k)
